@@ -6,12 +6,11 @@ from prophet import Prophet
 import pandas as pd
 
 class Transformer():
-    def __init__(self,df_train,df_test,logger):
+    def __init__(self, df_train, df_test, duration_predict, logger):
         self.df_train = df_train
         self.df_test = df_test
         self.logger = logger
-        self.duration_predict = 62
-        self.preprocess()
+        self.duration_predict = duration_predict
 
     def check_columns(self):
         '''
@@ -172,7 +171,7 @@ class Transformer():
             df_turnover_day = self.create_dataframe_turnover_per_day(self.df_train)
             limit_date = self.create_threshold_date(df_turnover_day)
             df_train_model, df_test_model = self.create_dataframe_train_valid(df_turnover_day,limit_date)
-            return df_train_model, df_test_model, df_businessunit_repr, df_department_repr, df_week_department_repr
+            return df_train_model, df_test_model, self.df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, limit_date
         except Exception as e:
             self.logger.logger.error(f"Error during the preprocessing : {e}")
             exit()
@@ -180,4 +179,4 @@ class Transformer():
 
 if __name__ == "__main__":
     reader = Reader("/home/louis/projects/perso/decathlon/test_data_scientist",logger)
-    Transformer = Transformer(reader.df_train,reader.df_test,logger)
+    transformer = Transformer(reader.df_train,reader.df_test,62,logger)
