@@ -1,8 +1,6 @@
 from read import Reader
 import logger
 import datetime
-from sklearn.metrics import r2_score, mean_absolute_error
-from prophet import Prophet
 import pandas as pd
 
 class Transformer():
@@ -171,7 +169,7 @@ class Transformer():
             df_turnover_day = self.create_dataframe_turnover_per_day(self.df_train)
             limit_date = self.create_threshold_date(df_turnover_day)
             df_train_model, df_test_model = self.create_dataframe_train_valid(df_turnover_day,limit_date)
-            return df_train_model, df_test_model, self.df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, limit_date
+            return self.df_train, df_train_model, df_test_model, self.df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, limit_date
         except Exception as e:
             self.logger.logger.error(f"Error during the preprocessing : {e}")
             exit()

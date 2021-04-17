@@ -4,7 +4,6 @@ import logger
 import datetime
 from sklearn.metrics import r2_score, mean_absolute_error
 from prophet import Prophet
-import pandas as pd
 
 class Trainer():
     def __init__(self, df_train, df_validate, threshold_date, logger):
@@ -39,6 +38,6 @@ class Trainer():
 if __name__ == "__main__":
     reader = Reader("/home/louis/projects/perso/decathlon/test_data_scientist",logger)
     transformer = Transformer(reader.df_train,reader.df_test,62,logger)
-    df_train_model, df_validate_model, df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, threshold_date = transformer.preprocess()
+    df_train, df_train_model, df_validate_model, df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, threshold_date = transformer.preprocess()
     trainer = Trainer(df_train_model, df_validate_model, threshold_date, logger)
     model = trainer.train_model()
