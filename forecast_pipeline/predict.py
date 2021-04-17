@@ -38,13 +38,17 @@ class Predicter():
         Output :
             df_result : the final prediction
         '''
-        df_prediction = self.predict_turnover()
-        year_turnover = self.calcul_one_year_turnover(df_prediction)
-        df_businessunit_year = self.apply_percentage_businessunit(year_turnover)
-        df_department_businessunit_year = self.apply_percentage_department_businessunit(df_businessunit_year)
-        df_week_department_businessunit_year = self.apply_percentage_department_week(df_department_businessunit_year)
-        df_result = self.merge_with_original_dftest(df_week_department_businessunit_year)
-        return df_result
+        try:
+            df_prediction = self.predict_turnover()
+            year_turnover = self.calcul_one_year_turnover(df_prediction)
+            df_businessunit_year = self.apply_percentage_businessunit(year_turnover)
+            df_department_businessunit_year = self.apply_percentage_department_businessunit(df_businessunit_year)
+            df_week_department_businessunit_year = self.apply_percentage_department_week(df_department_businessunit_year)
+            df_result = self.merge_with_original_dftest(df_week_department_businessunit_year)
+            return df_result
+        except Exception as e:
+            self.logger.logger.error(f"Error during the prediction : {e}")
+            exit()
 
     def calcul_one_year_turnover(self,df_prediction):
         '''
@@ -132,7 +136,6 @@ if __name__ == "__main__":
     df_train, df_train_model, df_validate_model, df_test, df_businessunit_repr, \
         df_department_repr, df_week_department_repr, threshold_date = transformer.preprocess()
     trainer = Trainer(df_train_model, df_validate_model, threshold_date, logger)
-    model = trainer.train_model()
+    model = trainer.train()
     predicter = Predicter(model, df_train, df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, logger)
     output = predicter.predict()
-    print(output)
