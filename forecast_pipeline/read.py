@@ -11,6 +11,13 @@ class Reader():
         self.fill_dataframes()
     
     def generate_df_train(self):
+        '''
+        Function to generate a dataframe from the train csv file
+        Input :
+            Nothing
+        Return :
+            data_loaded : True if the data has been loaded, False otherwise
+        '''
         data_loaded = False
         for file_name in os.listdir(self.path_folder_data):
             if file_name == "train.csv":
@@ -20,6 +27,13 @@ class Reader():
         return data_loaded
 
     def generate_df_test(self):
+        '''
+        Function to generate a dataframe from the test csv file
+        Input :
+            Nothing
+        Return :
+            data_loaded : True if the data has been loaded, False otherwise
+        '''
         data_loaded = False
         for file_name in os.listdir(self.path_folder_data):
             if file_name == "test.csv":
@@ -29,6 +43,13 @@ class Reader():
         return data_loaded
 
     def fill_dataframes(self):
+        '''
+        Function to fill the train and test dataframes
+        Input :
+            Nothing
+        Return :
+            Nothing
+        '''
         if os.path.isdir(self.path_folder_data):
             loaded_train_data = self.generate_df_train()
             if not loaded_train_data:
