@@ -54,11 +54,14 @@ class Reader():
             loaded_train_data = self.generate_df_train()
             if not loaded_train_data:
                 self.logger.logger.error(f"Train data cannot be loaded. End of the program.")
+                exit()
             loaded_test_data = self.generate_df_test()
             if not loaded_test_data:
                 self.logger.logger.error(f"Test data cannot be loaded. End of the program.")
+                exit()
         else:
             self.logger.logger.error(f"{self.path_folder_data} is not a directory. End of the program.")
+            exit()
 
 
 if __name__ == "__main__":
