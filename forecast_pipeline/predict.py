@@ -27,7 +27,7 @@ class Predicter():
         future_test = pd.DataFrame({'ds': list(self.df_test["day_id"].unique())})
         prediction_test = self.model.predict(df=future_test)
         df_prediction = prediction_test[["ds","yhat"]]
-        df_prediction["week"] = df_prediction["ds"].dt.isocalendar().week
+        df_prediction.loc[:,"week"] = df_prediction["ds"].dt.isocalendar().week
         return df_prediction
 
     def predict(self):
@@ -70,7 +70,7 @@ class Predicter():
             df_result : dataframe of the turnover by business unit
         '''
         df_result = self.df_businessunit_repr.copy()
-        df_result["turnover_bu"] = df_result["bu_percentage"]*turnover_rolling_year
+        df_result.loc[:,"turnover_bu"] = df_result["bu_percentage"]*turnover_rolling_year
         return df_result
 
     def apply_percentage_department_businessunit(self,df_turnover_businessunit):
@@ -93,7 +93,7 @@ class Predicter():
 
         df_result = pd.concat([df_turnover_businessunit_all,df_department_repres_all],axis=1)
         #apply percentage of department
-        df_result["turnover_bu_dep"] = df_result["turnover_bu"]*df_result["department_percentage"]
+        df_result.loc[:,"turnover_bu_dep"] = df_result["turnover_bu"]*df_result["department_percentage"]
         df_result = df_result[["but_num_business_unit","dpt_num_department","turnover_bu_dep"]]
         return df_result
 
@@ -106,7 +106,7 @@ class Predicter():
             df_result : dataframe of the turnover per business unit per department per week
         '''
         df_result = pd.merge(df_turnover_businessunit_department, self.df_week_repres, on="dpt_num_department", how="outer")
-        df_result["turnover_pred"] = df_result["turnover_bu_dep"]*df_result["week_percentage"]
+        df_result.loc[:,"turnover_pred"] = df_result["turnover_bu_dep"]*df_result["week_percentage"]
         return df_result
 
     def merge_with_original_dftest(self,df_turnover_businessunit_department_week):
@@ -118,10 +118,10 @@ class Predicter():
             df_result : dataframe of the turnover per business unit per department per week from the test data
         '''
         df_turnover_businessunit_department_week = df_turnover_businessunit_department_week[["but_num_business_unit","dpt_num_department","week","turnover_pred"]]
-        df_turnover_businessunit_department_week["dpt_num_department"] = df_turnover_businessunit_department_week["dpt_num_department"].astype("int")
-        df_turnover_businessunit_department_week["but_num_business_unit"] = df_turnover_businessunit_department_week["but_num_business_unit"].astype("int")
-        self.df_test["week"] = self.df_test["day_id"].dt.isocalendar().week
-        self.df_test["week"] = self.df_test["week"].astype("int")
+        df_turnover_businessunit_department_week.loc[:,"dpt_num_department"] = df_turnover_businessunit_department_week["dpt_num_department"].astype("int")
+        df_turnover_businessunit_department_week.loc[:,"but_num_business_unit"] = df_turnover_businessunit_department_week["but_num_business_unit"].astype("int")
+        self.df_test.loc[:,"week"] = self.df_test["day_id"].dt.isocalendar().week
+        self.df_test.loc[:,"week"] = self.df_test["week"].astype("int")
         df_result = self.df_test.merge(df_turnover_businessunit_department_week,on=["but_num_business_unit","dpt_num_department","week"],how="left")
         return df_result
 
