@@ -28,12 +28,12 @@ class Trainer():
             mask2 = forecast['ds'] < self.threshold_date
             forecast_train = forecast[mask2]
             forecast_test = forecast[~ mask2]
-            print('r2 train: {}'.format(r2_score(y_true=self.df_train['y'], y_pred=forecast_train['yhat'])))
-            print('r2 test: {}'.format(r2_score(y_true=self.df_validate['y'], y_pred=forecast_test['yhat'])))
-            print('---')
-            print('mae train: {}'.format(mean_absolute_error(y_true=self.df_train['y'], y_pred=forecast_train['yhat'])))
-            print('mae test: {}'.format(mean_absolute_error(y_true=self.df_validate['y'], y_pred=forecast_test['yhat'])))
-            return m
+            r2_train = r2_score(y_true=self.df_train['y'], y_pred=forecast_train['yhat'])
+            r2_test = r2_score(y_true=self.df_validate['y'], y_pred=forecast_test['yhat'])
+            mae_train = mean_absolute_error(y_true=self.df_train['y'], y_pred=forecast_train['yhat'])
+            mae_test = mean_absolute_error(y_true=self.df_validate['y'], y_pred=forecast_test['yhat'])
+            performance = {"r2_train":r2_train,"r2_test":r2_test,"mae_train":mae_train,"mae_test":mae_test}
+            return m, performance
         except Exception as e:
             self.logger.logger.error(f"Error during the model training : {e}")
             exit()
@@ -44,4 +44,4 @@ if __name__ == "__main__":
     transformer = Transformer(reader.df_train,reader.df_test,62,logger)
     df_train, df_train_model, df_validate_model, df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, threshold_date = transformer.preprocess()
     trainer = Trainer(df_train_model, df_validate_model, threshold_date, logger)
-    model = trainer.train()
+    model, performance = trainer.train()

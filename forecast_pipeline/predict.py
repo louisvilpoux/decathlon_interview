@@ -136,6 +136,6 @@ if __name__ == "__main__":
     df_train, df_train_model, df_validate_model, df_test, df_businessunit_repr, \
         df_department_repr, df_week_department_repr, threshold_date = transformer.preprocess()
     trainer = Trainer(df_train_model, df_validate_model, threshold_date, logger)
-    model = trainer.train()
+    model, performance = trainer.train()
     predicter = Predicter(model, df_train, df_test, df_businessunit_repr, df_department_repr, df_week_department_repr, logger)
     output = predicter.predict()
