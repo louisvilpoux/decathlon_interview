@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import logger
 
+
 class Reader():
     def __init__(self, path_folder_data, logger):
         self.path_folder_data = path_folder_data
@@ -9,7 +10,7 @@ class Reader():
         self.df_test = pd.DataFrame()
         self.logger = logger
         self.fill_dataframes()
-    
+
     def generate_df_train(self):
         '''
         Function to generate a dataframe from the train csv file
@@ -53,16 +54,20 @@ class Reader():
         if os.path.isdir(self.path_folder_data):
             loaded_train_data = self.generate_df_train()
             if not loaded_train_data:
-                self.logger.logger.error(f"Train data cannot be loaded. End of the program.")
+                self.logger.logger.error(f"Train data cannot be loaded. End \
+                    of the program.")
                 exit()
             loaded_test_data = self.generate_df_test()
             if not loaded_test_data:
-                self.logger.logger.error(f"Test data cannot be loaded. End of the program.")
+                self.logger.logger.error(f"Test data cannot be loaded. End of\
+                     the program.")
                 exit()
         else:
-            self.logger.logger.error(f"{self.path_folder_data} is not a directory. End of the program.")
+            self.logger.logger.error(f"{self.path_folder_data} is not a\
+                 directory. End of the program.")
             exit()
 
 
 if __name__ == "__main__":
-    reader = Reader("/home/louis/projects/perso/decathlon/test_data_scientist",logger)
+    folder = "/home/louis/projects/perso/decathlon/test_data_scientist"
+    reader = Reader(folder, logger)
